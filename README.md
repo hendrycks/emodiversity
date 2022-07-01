@@ -85,8 +85,8 @@ where
 
 ## Video to Valence (V2V) Dataset
 The V2V dataset consists preference annotations over a total of 26,670 videos, split into:
-- `train`: 11,115 pairwise comparisons on 16,279 unique videos
-- `test`: 3,112 pairwise comparisons on 6,069 unique videos
+- `train`: 11,038 pairwise comparisons on 16,125 unique videos
+- `test`: 3,189 pairwise comparisons on 6,223 unique videos
 - `listwise`: 1,758 listwise ranked comparisons on 4,322 unique videos (up to 4 videos per list)
 
 Note that `train`, `test`, `listwise` videos are mutually exclusive.
