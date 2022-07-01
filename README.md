@@ -11,56 +11,53 @@ vce_dataset/
 ├── metadata.json
 ├── train_labels.json
 ├── test_labels.json
-├── train/00000.mp4
-├── train/00001.mp4
-...
-├── train/49999.mp4
-├── test/50000.mp4
-├── test/50001.mp4
+├── videos/00000.mp4
+├── videos/00001.mp4
 ...
 ```
 where
-- `train/` and `test/` directories contain MP4 video files for the train and test splits (50,000 and 11,046 videos respectively)
-- `train_labels.json` and `test_labels.json` contain labels for their respective videos like 
+- `videos/` contains 61,406 MP4 video files from both the train and test splits 
+- `train_labels.json` and `test_labels.json` (50,000 and 11,046 members respectively) contain emotion labels corresponding to the videos. For example:
 ```json
 {
-    "00001": {
-        "emotions": {
-            "Admiration": 1.4166666666666667, # This is the average "intensity" score (rated 1-10) given by annotators who selected this emotion
-            "Adoration": 0.0,
-            "Aesthetic Appreciation": 5.583333333333333,
-            "Amusement": 1.4166666666666667,
+    "00000": {
+        "emotions": { # This is the average rated "intensity" score (rated 0-1) for each emotion
+            "Admiration": 0.4416666666666667,
+            "Adoration": 0.23333333333333334,
+            "Aesthetic Appreciation": 0.0,
+            "Amusement": 0.06666666666666667,
             "Anger": 0.0,
-            "Anxiety": 0.0,
-            "Awe (or Wonder)": 1.1666666666666667,
+            "Anxiety": 0.06666666666666667,
+            "Awe (or Wonder)": 0.225,
             "Awkwardness": 0.0,
             "Boredom": 0.0,
             "Calmness": 0.0,
             "Confusion": 0.0,
-            "Craving": 0.8333333333333334,
+            "Craving": 0.0,
             "Disgust": 0.0,
             "Empathic Pain": 0.0,
             "Entrancement": 0.0,
-            "Excitement": 0.0,
+            "Excitement": 0.13333333333333333,
             "Fear": 0.0,
             "Horror": 0.0,
-            "Interest": 0.8333333333333334,
-            "Joy": 0.0,
+            "Interest": 0.125,
+            "Joy": 0.08333333333333334,
             "Nostalgia": 0.0,
             "Relief": 0.0,
             "Romance": 0.0,
             "Sadness": 0.0,
-            "Satisfaction": 1.5,
+            "Satisfaction": 0.14166666666666666,
             "Sexual Desire": 0.0,
-            "Surprise": 0.0
+            "Surprise": 0.20833333333333334
         },
-        "topK": [
-            "Aesthetic Appreciation",
-            "Satisfaction",
-            "Admiration"
+        "file": "videos/00000.mp4",
+        "topK": [ # The 3 highest-intensity emotions, from most intense to least intense
+            "Admiration",
+            "Adoration",
+            "Awe (or Wonder)"
         ]
     },
-    "00002": {
+    "00001": {
     ...
 }
 ```
@@ -70,7 +67,7 @@ where
     "00000": {
         "codec_name": "h264",
         "duration": "12.000000",
-        "file": "train/00000.mp4",
+        "file": "videos/00000.mp4",
         "frame_rate": "30/1",
         "height": 320,
         "number_of_frames": "360",
@@ -98,20 +95,31 @@ v2v_dataset/
 ├── test/50001.mp4
 ...
 ```
-where everything has the same form as the VCE dataset, except that 
-- `train_labels.json` and `test_labels.json` contain a list of preference-ordered comparisons (most-preferred to least-preferred):
+This holds a similar form as the VCE dataset:
+- `videos/` contains 26,670 MP4 video files (this is a subset of the VCE dataset videos that have V2V labels)
+- `metadata.json` contains helpful metadata for all videos (this is the same as the metadata file in the VCE dataset)
+- `train_labels.json` and `test_labels.json` each contain a list of pairwise video comparisons, where the second video is more preferred:
 ```json
 {
     "comparisons": [
-        ["08711", "00842", "22249"],
-        ["25894", "58217", "22029", "22249"],
-        ["53147", "02989", "11888"],
-        ["32206", "06875", "61492"],
-        ["26382", "31415", "25377", "07105"],
+        ["52694", "15036"],
+        ["49134", "56215"],
+        ["34304", "31620"],
         ...
     ]
 }
 ```
-- And `train/` and `test/` only contain a subset of the videos from VCE that have V2V labels.
+- `listwise_labels.json` contains a list of listwise video comparisons (ordered from least-preferred to most-preferred):
+```
+{
+    "comparisons": [
+        ["50986", "05956", "42507"],
+        ["52542", "52733", "53157", "50334"],
+        ["38647", "11277", "53157", "50334"],
+        ["56616", "33536", "39234"],
+        ...
+    ]
+}
+```
 
 ## Citation
