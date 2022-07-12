@@ -23,10 +23,7 @@ def loadvideo_decord(fname, width, height, num_frames, frame_sample_rate=1):
     Output: numpy array of shape (T H W C)
     """
     try:
-        if width and height:
-            vr = decord.VideoReader(fname, width=width, height=height, num_threads=1, ctx=decord.cpu(0))
-        else:
-            vr = decord.VideoReader(fname, num_threads=1, ctx=decord.cpu(0))
+        vr = decord.VideoReader(fname, width=width, height=height, num_threads=1, ctx=decord.cpu(0))
     except FileNotFoundError:
         print("video cannot be loaded by decord: ", fname)
         return np.zeros((1, height, width, 3))
@@ -135,11 +132,8 @@ if __name__ == '__main__':
 
     # ------------------------ Pairwise dataset
     
-    full_dataset = V2VPairwiseDataset(options.data_dir, split="train", video_width=320, video_height=256, num_frames=10)
-    print("Length of dataset", len(full_dataset))
-    train_size = int(0.8 * len(full_dataset))
-    val_size = len(full_dataset) - train_size
-    train_dataset, val_dataset = torch.utils.data.random_split(full_dataset, [train_size, val_size])
+    dataset = V2VPairwiseDataset(options.data_dir, split="train", video_width=320, video_height=256, num_frames=10)
+    print("Length of dataset", len(dataset))
 
     def collate_batch(batch):
         videos_1, videos_2, metadata_1, metadata_2 = [], [], [], []
@@ -149,10 +143,7 @@ if __name__ == '__main__':
             metadata_1.append(md_1)
             metadata_2.append(md_2)
         return videos_1, videos_2, metadata_1, metadata_2
-
-    batch_size = 64
-    train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=0, collate_fn=collate_batch)
-    val_dataloader = DataLoader(val_dataset, batch_size=batch_size, shuffle=True, num_workers=0, collate_fn=collate_batch)
+    train_dataloader = DataLoader(dataset, batch_size=64, shuffle=True, num_workers=0, collate_fn=collate_batch)
 
     for batch_idx, batch in tqdm(enumerate(train_dataloader), total=len(train_dataloader)):
         print("Batch", batch_idx)
@@ -164,11 +155,8 @@ if __name__ == '__main__':
 
     # ------------------------ Listwise dataset
     
-    full_dataset = V2VListwiseDataset(options.data_dir, video_width=320, video_height=256, num_frames=10)
-    print("Length of dataset", len(full_dataset))
-    train_size = int(0.8 * len(full_dataset))
-    val_size = len(full_dataset) - train_size
-    train_dataset, val_dataset = torch.utils.data.random_split(full_dataset, [train_size, val_size])
+    dataset = V2VListwiseDataset(options.data_dir, video_width=320, video_height=256, num_frames=10)
+    print("Length of dataset", len(dataset))
 
     def collate_batch(batch):
         nested_videos_lists = []
@@ -177,10 +165,7 @@ if __name__ == '__main__':
             nested_videos_lists.append(videos_list)
             nested_metadata_lists.append(metadata_list)
         return nested_videos_lists, nested_metadata_lists
-
-    batch_size = 64
-    train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=0, collate_fn=collate_batch)
-    val_dataloader = DataLoader(val_dataset, batch_size=batch_size, shuffle=True, num_workers=0, collate_fn=collate_batch)
+    train_dataloader = DataLoader(dataset, batch_size=64, shuffle=True, num_workers=0, collate_fn=collate_batch)
 
     for batch_idx, batch in tqdm(enumerate(train_dataloader), total=len(train_dataloader)):
         print("Batch", batch_idx)
