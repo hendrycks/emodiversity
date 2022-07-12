@@ -79,19 +79,67 @@ class V2VPairwiseDataset(Dataset):
         md_2 = self.metadata_2[idx]
         return video_1, video_2, md_1, md_2
 
+class V2VListwiseDataset(Dataset):
+
+    def __init__(self, dataset_path, video_width, video_height, num_frames):
+        self.video_width = video_width
+        self.video_height = video_height
+        self.num_frames =  num_frames
+        self.data_path = Path(dataset_path)
+        assert self.data_path.is_dir()
+
+        with open(self.data_path / "metadata.json") as f:
+            metadata_dict = json.load(f)
+        
+        self.nested_video_paths = []
+        self.nested_metadata = []
+        with open(self.data_path / f"listwise_labels.json") as f:
+            labels_dict = json.load(f)
+            for comparison_list in labels_dict["comparisons"]:
+                video_paths = []
+                metadata = []
+                for video_id in comparison_list:
+                    path = str(self.data_path / f"videos/{video_id}.mp4")
+                    video_paths.append(path)
+                    metadata.append(metadata_dict[video_id])
+
+                self.nested_video_paths.append(video_paths)
+                self.nested_metadata.append(metadata)
+
+        assert len(self.nested_video_paths) == len(self.nested_metadata)
+
+    def __len__(self):
+        return len(self.nested_video_paths)
+
+    def __getitem__(self, idx):
+        """
+        returns (videos_list, metadata_list)
+        - videos_list:      is a list of [videoA, videoB, …]
+        - metadata_list:    is a list of [metadataA, metadataB, …]
+        where the last video in the list is the most-preferred one.
+        """
+        videos_list = []
+        metadata_list = []
+        for video_path in self.nested_video_paths[idx]:
+            video = loadvideo_decord(video_path, self.video_width, self.video_height, self.num_frames)
+            videos_list.append(video)
+        for metadata in self.nested_metadata[idx]:
+            metadata_list.append(metadata)
+        return videos_list, metadata_list
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='PyTorch Dataset and DataLoader for V2V dataset')
     parser.add_argument("-d", "--data-dir", required=True, help="Dataset directory.")
     options = parser.parse_args()
 
+    # ------------------------ Pairwise dataset
     
     full_dataset = V2VPairwiseDataset(options.data_dir, split="train", video_width=320, video_height=256, num_frames=10)
     print("Length of dataset", len(full_dataset))
     train_size = int(0.8 * len(full_dataset))
     val_size = len(full_dataset) - train_size
     train_dataset, val_dataset = torch.utils.data.random_split(full_dataset, [train_size, val_size])
-
 
     def collate_batch(batch):
         videos_1, videos_2, metadata_1, metadata_2 = [], [], [], []
@@ -112,3 +160,31 @@ if __name__ == '__main__':
         for vid_1, vid_2, md_1, md_2 in zip(videos_1, videos_2, metadata_1, metadata_2):
             print("vid 1:", vid_1.shape, md_1)
             print("vid 2:", vid_2.shape, md_2)
+    
+
+    # ------------------------ Listwise dataset
+    
+    full_dataset = V2VListwiseDataset(options.data_dir, video_width=320, video_height=256, num_frames=10)
+    print("Length of dataset", len(full_dataset))
+    train_size = int(0.8 * len(full_dataset))
+    val_size = len(full_dataset) - train_size
+    train_dataset, val_dataset = torch.utils.data.random_split(full_dataset, [train_size, val_size])
+
+    def collate_batch(batch):
+        nested_videos_lists = []
+        nested_metadata_lists = []
+        for (videos_list, metadata_list) in batch:
+            nested_videos_lists.append(videos_list)
+            nested_metadata_lists.append(metadata_list)
+        return nested_videos_lists, nested_metadata_lists
+
+    batch_size = 64
+    train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=0, collate_fn=collate_batch)
+    val_dataloader = DataLoader(val_dataset, batch_size=batch_size, shuffle=True, num_workers=0, collate_fn=collate_batch)
+
+    for batch_idx, batch in tqdm(enumerate(train_dataloader), total=len(train_dataloader)):
+        print("Batch", batch_idx)
+        nested_videos_lists, nested_metadata_lists = batch
+        for videos_list, metadata_list in zip(nested_videos_lists, nested_metadata_lists):
+            for i in range(len(videos_list)):
+                print(f"vid {i}: {videos_list[i].shape} {metadata_list[i]}")    
