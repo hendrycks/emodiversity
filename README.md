@@ -128,5 +128,3 @@ where
     ]
 }
 ```
-
-## Citation
