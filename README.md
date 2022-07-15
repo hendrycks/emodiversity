@@ -1,7 +1,6 @@
 # Emodiversity
 
-This repository will contain the data and code that was used in the creation of Video Cognitive Empathy (VCE) and Video to Valence (V2V) datasets. 
-The work is currently in submission and will be made available soon.
+This repository will contain the data and code that was used in the creation of [Video Cognitive Empathy (VCE) and Video to Valence (V2V) datasets](https://drive.google.com/drive/folders/1sRKitbXpLZ4pwXTONjiA-X0Y1z4I2o4X?usp=sharing). 
 
 ## Video Cognitive Empathy (VCE) dataset
 The VCE dataset contains 61,046 videos, each labelled for the intensity of 27 emotions. The dataset is split into
