@@ -144,7 +144,9 @@ git submodule update --init
 ```
 
 #### Pretrained models
-We finetune our models on top of the VideoMAE models pretrained on the [Kinetics-400](https://www.deepmind.com/open-source/kinetics) dataset. Download the pretrained model "Kinetics-400, ViT-B, Epoch 1600, Pre-train checkpoint" from [this page](https://github.com/JunShern/VideoMAE/blob/main/MODEL_ZOO.md) and save it to `emodiversity/VideoMAE/models/kinetics400-ViTB-1600-16x5x3-pretrain.pth`. If you have [gdown](https://github.com/wkentaro/gdown) installed, you can do this with:
+We finetune our models on top of the VideoMAE models pretrained on the [Kinetics-400](https://www.deepmind.com/open-source/kinetics) dataset. Download the pretrained model "Kinetics-400, ViT-B, Epoch 1600, Pre-train checkpoint" from [this page](https://github.com/JunShern/VideoMAE/blob/main/MODEL_ZOO.md) and save it to `emodiversity/VideoMAE/models/kinetics400-ViTB-1600-16x5x3-pretrain.pth`.
+
+If you have [gdown](https://github.com/wkentaro/gdown) installed, this command does the above for you:
 ```
 gdown 1tEhLyskjb755TJ65ptsrafUG2llSwQE1 --output emodiversity/VideoMAE/models/kinetics400-ViTB-1600-16x5x3-pretrain.pth
 ```
@@ -160,7 +162,7 @@ and
 bash VideoMae/scripts/finetune_v2v.sh
 ```
 
-In practice, we use sbatch scripts with a SLURM cluster to train our models. If you would like to replicate this, please refer to `finetune_vce.sbatch` and `finetunte_v2v.sbatch`.
+In practice, we use sbatch scripts with a SLURM cluster to train our models. If you would like to replicate this, please refer to `finetune_vce.sbatch` and `finetune_v2v.sbatch`.
 
 
 ## Citation
