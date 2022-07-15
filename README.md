@@ -3,6 +3,11 @@
 This repository will contain the data and code that was used in the creation of Video Cognitive Empathy (VCE) and Video to Valence (V2V) datasets. 
 The work is currently in submission and will be made available soon.
 
+This repository contains submodules. To clone the full repository along with submodules (required for reproducing training/results), please use
+```
+git clone --recurse-submodules https://github.com/hendrycks/emodiversity.git
+```
+
 ## Video Cognitive Empathy (VCE) dataset
 The VCE dataset contains 61,046 videos, each labelled for the intensity of 27 emotions. The dataset is split into
 1. `train`: 50,000 videos
@@ -128,5 +133,31 @@ where
     ]
 }
 ```
+
+## Reproducibility
+
+### VideoMAE
+
+To reproduce our results with the VideoMAE models, make sure you have our fork of the VideoMAE repository in this repository submodule.
+
+#### Pretrained models
+We finetune our models on top of the VideoMAE models pretrained on the Kinetics-400 dataset. Download the pretrained model "Kinetics-400, ViT-B, Epoch 1600, Pre-train checkpoint" from [this page](https://github.com/JunShern/VideoMAE/blob/main/MODEL_ZOO.md) and save it to `emodiversity/VideoMAE/models/kinetics400-ViTB-1600-16x5x3-pretrain.pth`.
+```
+gdown 1tEhLyskjb755TJ65ptsrafUG2llSwQE1 --output emodiversity/VideoMAE/models/kinetics400-ViTB-1600-16x5x3-pretrain.pth
+```
+
+
+#### Fine-tuning models
+To finetune the VideoMAE models on our dataset, you can run
+```
+bash VideoMae/scripts/finetune_vce.sh
+```
+and
+```
+bash VideoMae/scripts/finetune_v2v.sh
+```
+
+In practice, we use sbatch scripts with a SLURM cluster to train our models. If you would like to replicate this, please refer to `finetune_vce.sbatch` and `finetunte_v2v.sbatch`.
+
 
 ## Citation
