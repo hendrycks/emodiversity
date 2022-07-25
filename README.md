@@ -143,6 +143,8 @@ To reproduce our results with the VideoMAE models, make sure you have [our fork 
 git submodule update --init
 ```
 
+Please follow the [installation instructions](https://github.com/JunShern/VideoMAE/blob/main/INSTALL.md) in the VideoMAE repository to install the required dependencies.
+
 #### Pretrained models
 We finetune our models on top of the VideoMAE models pretrained on the [Kinetics-400](https://www.deepmind.com/open-source/kinetics) dataset. Download the pretrained model "Kinetics-400, ViT-B, Epoch 1600, Pre-train checkpoint" from [this page](https://github.com/JunShern/VideoMAE/blob/main/MODEL_ZOO.md) and save it to `emodiversity/VideoMAE/models/kinetics400-ViTB-1600-16x5x3-pretrain.pth`.
 
@@ -152,8 +154,12 @@ gdown 1tEhLyskjb755TJ65ptsrafUG2llSwQE1 --output emodiversity/VideoMAE/models/ki
 ```
 
 
-#### Fine-tuning models
-To finetune the VideoMAE models on our dataset, update the relevant filepaths in the `VideoMae/scripts/finetune_vce.sh` and `VideoMae/scripts/finetune_v2v.sh` scripts to match your system, and run them:
+#### Fine-tuning
+We provide the VideoMAE models fine-tuned on our datasets available for download here:
+- [VCE-finetuned model](https://drive.google.com/file/d/12VBwftXYGfs779IBus3KEToke5Tr9Sdp/view?usp=sharing)
+- V2V-finetuned model
+
+If you wish to finetune the VideoMAE models yourself, update the relevant filepaths in the `VideoMae/scripts/finetune_vce.sh` and `VideoMae/scripts/finetune_v2v.sh` scripts to match your system, and run them:
 ```
 bash VideoMae/scripts/finetune_vce.sh
 ```
@@ -163,6 +169,18 @@ bash VideoMae/scripts/finetune_v2v.sh
 ```
 
 In practice, we use sbatch scripts with a SLURM cluster to train our models. If you would like to replicate this, please refer to `finetune_vce.sbatch` and `finetune_v2v.sbatch`.
+
+
+#### Evaluation
+The commands to evaluate a fine-tuned model on our datasets are shown below.
+
+VCE test evaluation:
+```
+```
+
+V2V test and listwise evaluation:
+```
+```
 
 
 ## Citation
