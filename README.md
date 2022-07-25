@@ -155,11 +155,11 @@ gdown 1tEhLyskjb755TJ65ptsrafUG2llSwQE1 --output emodiversity/VideoMAE/models/ki
 #### Fine-tuning models
 To finetune the VideoMAE models on our dataset, update the relevant filepaths in the `VideoMae/scripts/finetune_vce.sh` and `VideoMae/scripts/finetune_v2v.sh` scripts to match your system, and run them:
 ```
-bash VideoMae/scripts/finetune_vce.sh
+bash VideoMAE/scripts/emodiversity/finetune_vce.sh
 ```
 and
 ```
-bash VideoMae/scripts/finetune_v2v.sh
+bash VideoMAE/scripts/emodiversity/finetune_v2v.sh
 ```
 
 In practice, we use sbatch scripts with a SLURM cluster to train our models. If you would like to replicate this, please refer to `finetune_vce.sbatch` and `finetune_v2v.sbatch`.
