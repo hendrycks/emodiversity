@@ -1,7 +1,6 @@
 # Emodiversity
 
-This repository will contain the data and code that was used in the creation of Video Cognitive Empathy (VCE) and Video to Valence (V2V) datasets. 
-The work is currently in submission and will be made available soon.
+This repository will contain the data and code that was used in the creation of [Video Cognitive Empathy (VCE) and Video to Valence (V2V) datasets](https://drive.google.com/drive/folders/1sRKitbXpLZ4pwXTONjiA-X0Y1z4I2o4X?usp=sharing). 
 
 This repository contains submodules. To clone the full repository along with submodules (required for reproducing training/results), please use
 ```
@@ -134,6 +133,7 @@ where
 }
 ```
 
+
 ## Reproducibility
 
 ### VideoMAE
@@ -184,3 +184,4 @@ V2V test and listwise evaluation:
 
 
 ## Citation
+
