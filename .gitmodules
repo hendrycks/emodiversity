@@ -1,0 +1,3 @@
+[submodule "VideoMAE"]
+	path = VideoMAE
+	url = git@github.com:JunShern/VideoMAE.git
